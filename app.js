@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const https = require('https');
 const cors = require('cors');
 const path = require('path');
-const serverless = require('serverless-http');
 
 const app = express();
 
