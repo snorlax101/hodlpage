@@ -7,7 +7,10 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 

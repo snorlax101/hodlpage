@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.querySelector('tbody');
 
-  fetch('http://localhost:8080/api/cryptos')
+  fetch('https://hodl-page-demo.onrender.com/api/cryptos')
     .then((response) => response.json())
     .then((data) => {
 
