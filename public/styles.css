@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #333;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+header {
+  background-color: #222;
+  color: #fff;
+  padding: 10px 0;
+}
+
+header nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .logo {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+header ul {
+  list-style: none;
+  display: flex;
+}
+
+header ul li {
+  margin-left: 20px;
+}
+
+header ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+main {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+th,
+td {
+  padding: 12px 8px;
+  color: #fff;
+}
+
+th {
+  background-color: #444;
+}
+
+/* Styling for the rows */
+tr {
+  background-color: #2b2b2b;
+  border-radius: 10px; /* Rounded corners */
+  margin-bottom: 10px; /* Spacing between rows */
+}
+
+tr:nth-child(even) {
+  background-color: #282828;
+}
+
+/* Add spacing between each row */
+tr:not(:last-child) {
+  border-bottom: 1px solid #555;
+}
+
+tr:hover {
+  background-color: #444;
+}
+
+tr:first-child:hover {
+  background-color: #333;
+}
+
+footer {
+  text-align: center;
+  background-color: #222;
+  color: #fff;
+  padding: 10px 0;
+}
