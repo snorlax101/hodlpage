@@ -3,11 +3,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.querySelector('tbody');
 
-  // Fetch cryptocurrency data from the backend API
-  fetch('http://localhost:3000/api/cryptos')
+  fetch('http://localhost:8080/api/cryptos')
     .then((response) => response.json())
     .then((data) => {
-      // Populate the table with the retrieved data
+
       data.forEach((crypto) => {
         const { name, last, buy, sell, volume, base_unit } = crypto;
 

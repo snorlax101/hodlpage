@@ -1,5 +1,5 @@
 // app.js
-
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const https = require('https');
@@ -8,12 +8,11 @@ const path = require('path');
 const serverless = require('serverless-http');
 
 const app = express();
-const route =  express.Router();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-const mongoURI = 'mongodb://127.0.0.1:27017/cryptocurrencies';
+const mongoURI = process.env.mongoURI_connection;
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
@@ -91,7 +90,7 @@ async function fetchDataAndStore() {
 }
 fetchDataAndStore();
 
-route.get('/api/cryptos', async (req, res) => {
+app.get('/api/cryptos', async (req, res) => {
     try {
       const cryptos = await Crypto.find({}, '-_id name last buy sell volume').limit(10);
       res.json(cryptos);
@@ -102,7 +101,7 @@ route.get('/api/cryptos', async (req, res) => {
   });
 
 
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT; 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
