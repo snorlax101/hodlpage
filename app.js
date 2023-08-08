@@ -5,15 +5,16 @@ const mongoose = require('mongoose');
 const https = require('https');
 const cors = require('cors');
 const path = require('path');
+const serverless = require('serverless-http');
 
 const app = express();
+const route =  express.Router();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-const mongoURI = 'mongodb://127.0.0.1:27017/cryptocurrencies'; // Replace with your MongoDB connection URL
+const mongoURI = 'mongodb://127.0.0.1:27017/cryptocurrencies';
 
-// Connect to MongoDB
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -25,7 +26,6 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-// Define a schema for storing cryptocurrency data
 const cryptoSchema = new mongoose.Schema({
   name: String,
   last: Number,
@@ -45,7 +45,6 @@ async function clearExistingData() {
     }
   }
 
-// Fetch data from WazirX API and store in MongoDB
 async function fetchDataAndStore() {
   await clearExistingData();
   try {
@@ -90,11 +89,9 @@ async function fetchDataAndStore() {
     console.error('Error fetching data:', error);
   }
 }
-
-// Call the fetchDataAndStore function to fetch and store data at the start of the server
 fetchDataAndStore();
 
-app.get('/api/cryptos', async (req, res) => {
+route.get('/api/cryptos', async (req, res) => {
     try {
       const cryptos = await Crypto.find({}, '-_id name last buy sell volume').limit(10);
       res.json(cryptos);
@@ -104,7 +101,8 @@ app.get('/api/cryptos', async (req, res) => {
     }
   });
 
-const PORT = 3000; 
+
+const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
