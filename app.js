@@ -83,7 +83,7 @@ app.get('/api/cryptos', async (req, res) => {
       const cryptos_res = await Crypto.find({}, '-_id name last buy sell volume').limit(10);
       console.log('Retrieved data:', cryptos_res);
       res.json(cryptos_res);
-    }, 2000);
+    }, 5000);
   } 
   catch (error) {
     console.error('Error:', error);
