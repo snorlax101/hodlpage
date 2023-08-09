@@ -1,4 +1,3 @@
-// app.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -32,24 +31,20 @@ const cryptoSchema = new mongoose.Schema({
   last: Number,
   buy: Number,
   sell: Number,
-  volume: Number
+  volume: Number,
+  base_unit: String
 });
 
 const Crypto = mongoose.model('Crypto', cryptoSchema);
 
-async function clearExistingData() {
-    try {
-      await Crypto.deleteMany({});
-      console.log('Existing data cleared.');
-    } catch (error) {
-      console.error('Error clearing existing data:', error);
-    }
-  }
-
-async function fetchDataAndStore() {
-  await clearExistingData();
+app.get('/api/cryptos', async (req, res) => {
   try {
-    https.get('https://api.wazirx.com/api/v2/tickers', (response) => {
+    // Clear existing data
+    await Crypto.deleteMany({});
+    console.log('Existing data cleared.');
+
+    // Fetch data from WazirX
+    https.get('https://api.wazirx.com/api/v2/tickers', async (response) => {
       let data = '';
 
       response.on('data', (chunk) => {
@@ -58,12 +53,8 @@ async function fetchDataAndStore() {
 
       response.on('end', async () => {
         const tickers = JSON.parse(data);
-
-        // Extract top 10 tickers
         const top10Tickers = Object.values(tickers).slice(0, 10);
-        //console.log(JSON.stringify(top10Tickers));
 
-        // Store data in MongoDB
         for (const ticker of top10Tickers) {
           const { base_unit, last, buy, sell, volume } = ticker;
           const crypto = new Crypto({
@@ -71,36 +62,35 @@ async function fetchDataAndStore() {
             last,
             buy,
             sell,
-            volume
+            volume,
+            base_unit
           });
+
           console.log('Saving data:', crypto);
           try {
             await crypto.save();
             console.log('Data saved:', crypto);
-          } 
-          catch (saveError) {
-          console.error('Error saving data:', saveError);
+          } catch (saveError) {
+            console.error('Error saving data:', saveError);
           }
         }
 
         console.log('Data stored in MongoDB.');
       });
     });
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-fetchDataAndStore();
 
-app.get('/api/cryptos', async (req, res) => {
-    try {
-      const cryptos = await Crypto.find({}, '-_id name last buy sell volume').limit(10);
-      res.json(cryptos);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).json({ error: 'Error fetching data' });
-    }
-  });
+    setTimeout(async () => {
+      const cryptos_res = await Crypto.find({}, '-_id name last buy sell volume').limit(10);
+      console.log('Retrieved data:', cryptos_res);
+      res.json(cryptos_res);
+    }, 2000);
+  } 
+  catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error fetching data' });
+  }
+});
+
 
 
 const PORT = process.env.PORT; 
